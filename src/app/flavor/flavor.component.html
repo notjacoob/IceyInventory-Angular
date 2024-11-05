@@ -1,0 +1,69 @@
+<div class="flavor-parent d-flex flex-column">
+    <div class="d-flex flex-row flavor-header">
+        <div class="d-flex flex-row gap-3 text-center flavor-header-child">
+            <ng-container *ngIf="!edit">
+                <h5>{{flavor.name}}</h5>
+                <h5>Cost/batch: ${{flavor.costPerBatch}}</h5>
+            </ng-container>
+            <ng-container *ngIf="edit">
+                <h5><input type="text" [(ngModel)]="newName"></h5>
+                <h5>Cost/batch: <input type=number [(ngModel)]="newCostPerBatch"></h5>
+                <a class="link-btn" (click)="submitEdit()">Submit</a>
+            </ng-container>
+            <a class="link-btn" (click)="toggleEdit()">Edit</a>
+        </div>
+        <div class="d-flex flex-row gap-5 flavor-header-child">
+            <a (click)="sendDelete()" class="flavor-delete">Delete</a>
+            <div class="form-switch form-check">
+                <label [attr.for]="'making-' + flavor.id" class="form-check-label">Making</label>
+                <input type="checkbox" role="switch" [attr.id]="'making-' + flavor.id" name="making" class="form-check-input" [ngModel]="flavor.making" (ngModelChange)="makeStateChange($event)">
+            </div>
+            <div class="form-switch form-check">
+                <label [attr.for]="'inUse-' + flavor.id" class="form-check-label">In Use</label>
+                <input type="checkbox" [attr.id]="'inUse-' + flavor.id" name="inUse" class="form-check-input" [ngModel]="flavor.inUse" (ngModelChange)="inUseStateChange($event)">
+            </div>
+        </div>
+
+    </div>
+    <div class="d-flex flex-row">
+        <table class="table table-striped flavor-inventory-display">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(batch of formatBatches(); track batch.batch.id) {
+                    <tr>
+                        <td>{{parseDate(batch.batch)}}</td>
+                        <td>{{batch.batch.type}}</td>
+                        <td>{{batch.count}}</td>
+                    </tr>
+                }
+                <tr *ngIf="batches.length == 0">
+                    <td>No data!</td>
+                    <td>No data!</td>
+                    <td>No data!</td>
+                </tr>
+            </tbody>
+        </table>
+        <form style="background-color: white;" class="d-flex flex-column flavor-inventory-control gap-1 p-2" name=newBatch ngDefaultControl (ngSubmit)="createNewBatch()">
+            <h4>Inventory Control</h4>
+            <input type="number" id="count" name="count" placeholder="Enter count..." [(ngModel)]="newBatch.count">
+            <label for=datemade>Select date...</label>
+            <input type="date" id="datemade" name="datemade" [(ngModel)]="newBatch.dateMade">
+            <div>
+                <label for="full">Full Batch</label>
+                <input type="radio" id="full" name="type" value="Full" [(ngModel)]="newBatch.type">
+            </div>
+            <div>
+                <label for="half">Half Batch</label>
+                <input type="radio" id="half" name="type" value="Half" [(ngModel)]="newBatch.type">
+            </div>
+            <input type="hidden" name="flavor" [value]="flavor.id" [(ngModel)]="newBatch.flavor">
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+</div>

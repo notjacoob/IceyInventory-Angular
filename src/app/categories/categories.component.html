@@ -1,0 +1,27 @@
+<app-navbar [currentPage]="'categories'"></app-navbar>
+<div class="w-100 h-100 d-flex align-items-center justify-content-center flex-column">
+    <h1>Categories</h1>
+    <ul class="list-group mt-3 w-75 text-center">
+        <li class="list-group-item" *ngIf="categories.length == 0">No categories!</li>
+        @for(c of categories; track c.id) {
+            <li class="list-group-item d-flex flex-row justify-content-evenly">
+                <a style="color:red;" class="link-btn" (click)="del(c.id)">Delete</a>
+                <span *ngIf="toEdit == false || whichEdit != c.id">{{c.name}}</span>
+                <form *ngIf="toEdit == true && whichEdit == c.id" class="d-flex flex-row gap-1" (ngSubmit)="confirmEdit(c)">
+                    <input type="text" name="name" class="submit-btn" [(ngModel)]="newName">
+                    <button type="submit" class="submit-btn">Submit</button>
+                </form>
+                <a style="color:green;" class="link-btn" (click)="edit(c)">Edit</a>
+            </li>
+        }
+        <li class="list-group-item d-flex flex-row justify-content-evenly">
+            <a *ngIf="!newCat" type="link" class="link-btn" (click)="newCategory()" >Create new category...</a>
+            <ng-container *ngIf="newCat">
+                <a style="color: red;" class="link-btn" (click)="cancelNewCat()">Cancel</a>
+                <input type="text" placeholder="Enter name..." [(ngModel)]="newCatName">
+                <a style="color: green;" class="link-btn" (click)="confirmNewCat()">Submit</a>
+            </ng-container>
+        </li>
+      </ul>
+      
+</div>

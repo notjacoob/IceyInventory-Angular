@@ -1,0 +1,20 @@
+<app-navbar currentPage="new-flavor"></app-navbar>
+<div class="w-100 h-100 d-flex align-items-center justify-content-center flex-column">
+    <button class="w-75 mt-3 submit-btn" [routerLink]="['/flavor-management']">Go Back</button>
+
+    <hr/>
+
+    <h2>New Flavor</h2>
+    <form class="w-75 mt-3 text-center d-flex flex-column align-items-center gap-3" name="newFlavor" ngDefaultControl (ngSubmit)="createFlavor()">
+        <input class="w-75 text-center submit-btn" type="text" name="flavorName" placeholder="Enter name..." [(ngModel)]="flavorName">
+        <input class="w-75 text-center submit-btn" type="number" name="flavorName" placeholder="Enter cost per batch..." [(ngModel)]="costPerBatch">
+        <select class="form-select w-75 text-center submit-btn" name="categoryId" [(ngModel)]="categoryId">
+            <option value="-1" selected>Select category...</option>
+            @for(c of categories; track c.id) {
+                <option [value]="c.id">{{c.name}}</option>
+            }
+        </select>
+        <button type="submit" class="w-75 submit-btn">Submit</button>
+    </form>
+
+</div>
